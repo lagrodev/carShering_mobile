@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark palette overrides (keeps the same color names used across layouts) -->
+    <color name="primary">#818CF8</color>
+    <color name="primary_dark">#6366F1</color>
+    <color name="primary_light">#A5B4FC</color>
+
+    <color name="accent">#FB923C</color>
+    <color name="accent_light">#FED7AA</color>
+
+    <color name="on_primary">#0B1220</color>
+    <color name="primary_container">#1E1B4B</color>
+    <color name="on_primary_container">#E6EAF2</color>
+
+    <color name="on_accent">#0B1220</color>
+    <color name="accent_container">#431407</color>
+    <color name="on_accent_container">#FFE7D1</color>
+
+    <color name="background">#0B1220</color>
+    <color name="background_secondary">#0F172A</color>
+    <color name="surface">#0F172A</color>
+    <color name="surface_variant">#111C2E</color>
+
+    <color name="text_primary">#E6EAF2</color>
+    <color name="text_secondary">#A7B0C0</color>
+    <color name="text_hint">#6B7280</color>
+
+    <color name="divider">#243145</color>
+    <color name="border">#2B3B52</color>
+
+    <color name="favorite">@color/accent</color>
+    <color name="chip_background">@color/surface_variant</color>
+
+    <!-- Gradients tuned for dark mode -->
+    <color name="gradient_primary_start">#2B2D74</color>
+    <color name="gradient_primary_end">#4C1D95</color>
+    <color name="gradient_surface_start">#111827</color>
+    <color name="gradient_surface_center">#0F172A</color>
+    <color name="gradient_surface_end">#0B1220</color>
+</resources>

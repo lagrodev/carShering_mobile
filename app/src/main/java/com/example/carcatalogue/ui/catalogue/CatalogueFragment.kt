@@ -5,176 +5,124 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.carcatalogue.R
-import com.example.carcatalogue.data.api.RetrofitClient
-import com.example.carcatalogue.data.model.CarListItemResponse
-import com.example.carcatalogue.databinding.FragmentCatalogueBinding
+import com.example.carcatalogue.databinding.FragmentCatalogueVibrantBinding
 import kotlinx.coroutines.*
-import retrofit2.HttpException
-import kotlin.collections.map
+import kotlinx.coroutines.flow.collectLatest
 
 class CatalogueFragment : Fragment() {
 
-    private var _binding: FragmentCatalogueBinding? = null
+    private var _binding: FragmentCatalogueVibrantBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: CatalogueViewModel by viewModels()
 
     private val adapter = CarAdapter { carId ->
         navigateToDetail(carId)
     }
-
-    private var currentFilter: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCatalogueBinding.inflate(inflater, container, false)
+        _binding = FragmentCatalogueVibrantBinding.inflate(inflater, container, false)
         return binding.root
     }
-    private lateinit var filterButtons: MutableList<Button>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        filterButtons = mutableListOf()
-
         setupRecyclerView()
-        loadBrands() // ← загружаем бренды вместо статических фильтров
-        loadCars(null)
-
-        binding.searchInput.setOnEditorActionListener { _, _, _ ->
-            val query = binding.searchInput.text.toString().trim()
-            loadCars(if (query.isEmpty()) null else query)
-            true
-        }
+        setupSwipeRefresh()
+        setupFilters()
+        observeViewModel()
     }
 
-
-
-    private fun loadBrands() {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = RetrofitClient.apiService.getBrands(page = 0, size = 100)
-                if (response.isSuccessful && response.body() != null) {
-                    val brands = response.body()!!.content.map { it.brand }.distinct()
-                    renderBrandFilters(brands)
-                }
-            } catch (e: Exception) {
-                Log.e("API", "Failed to load brands", e)
-                // Можно показать ошибку или оставить пустым
-            }
-        }
-    }
-
-    private fun renderBrandFilters(brands: List<String>) {
-        val context = requireContext()
-        val container = binding.filterContainer
-        container.removeAllViews()
-        filterButtons.clear()
-
-        // Кнопка "All"
-        val allButton = Button(context).apply {
-            text = "All"
-            setBackgroundResource(R.drawable.rounded_input)
-            backgroundTintList = ContextCompat.getColorStateList(context, R.color.blue)
-            setTextColor(ContextCompat.getColor(context, R.color.white))
-            setOnClickListener {
-                selectBrandFilter(null)
-                updateSelectedButton(this)
-            }
-        }
-        container.addView(allButton)
-        filterButtons.add(allButton)
-
-        // Кнопки брендов
-        brands.forEach { brand ->
-            val button = Button(context).apply {
-                text = brand
-                setBackgroundResource(R.drawable.rounded_input)
-                backgroundTintList = ContextCompat.getColorStateList(context, R.color.white)
-                setTextColor(ContextCompat.getColor(context, R.color.black))
-                setOnClickListener {
-                    selectBrandFilter(brand)
-                    updateSelectedButton(this)
+    private fun observeViewModel() {
+        // Наблюдаем за состоянием UI
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collectLatest { state ->
+                when (state) {
+                    is CatalogueUiState.Loading -> {
+                        binding.progressBar.isVisible = true
+                        binding.rvCars.isVisible = false
+                    }
+                    is CatalogueUiState.Success -> {
+                        binding.progressBar.isVisible = false
+                        binding.swipeRefresh.isRefreshing = false
+                        
+                        if (state.cars.isEmpty()) {
+                            binding.rvCars.isVisible = false
+                            Toast.makeText(requireContext(), "Автомобили не найдены", Toast.LENGTH_SHORT).show()
+                        } else {
+                            binding.rvCars.isVisible = true
+                            adapter.submitList(state.cars)
+                        }
+                    }
+                    is CatalogueUiState.Error -> {
+                        binding.progressBar.isVisible = false
+                        binding.swipeRefresh.isRefreshing = false
+                        Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
-            container.addView(button)
-            filterButtons.add(button)
-        }
-
-        // По умолчанию выбран "All"
-        selectBrandFilter(null)
-        updateSelectedButton(allButton)
-    }
-
-    private var selectedBrand: String? = null
-
-    private fun selectBrandFilter(brand: String?) {
-        selectedBrand = brand
-        loadCars(searchQuery = binding.searchInput.text.toString().trim().takeIf { it.isNotEmpty() }, brand = brand)
-    }
-
-    private fun updateSelectedButton(selected: Button) {
-        val context = requireContext()
-        filterButtons.forEach { btn ->
-            if (btn == selected) {
-                btn.backgroundTintList = ContextCompat.getColorStateList(context, R.color.blue)
-                btn.setTextColor(ContextCompat.getColor(context, R.color.white))
-            } else {
-                btn.backgroundTintList = ContextCompat.getColorStateList(context, R.color.white)
-                btn.setTextColor(ContextCompat.getColor(context, R.color.black))
-            }
         }
     }
+
     private fun setupRecyclerView() {
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+        val linearLayoutManager = LinearLayoutManager(context)
+        binding.rvCars.apply {
+            layoutManager = linearLayoutManager
             adapter = this@CatalogueFragment.adapter
-        }
-    }
-
-
-
-    private fun updateFilterButtons(selected: View, allButtons: List<Pair<View, String?>>) {
-        allButtons.forEach { (button, _) ->
-            button.setBackgroundResource(R.drawable.rounded_input)
-        }
-        selected.setBackgroundResource(R.drawable.rounded_input)
-        selected.backgroundTintList = resources.getColorStateList(R.color.blue)
-    }
-
-    private fun loadCars(searchQuery: String? = null, brand: String? = null) {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = RetrofitClient.apiService.getCatalogue(
-                    brand = brand,
-                    model = searchQuery?.takeIf { it.isNotEmpty() },
-                    page = 0,
-                    size = 20
-                )
-                if (response.isSuccessful && response.body() != null) {
-                    val cars = response.body()!!.content
-                    adapter.submitList(cars)
-                } else {
-                    Toast.makeText(requireContext(), "No cars found", Toast.LENGTH_SHORT).show()
+            
+            // Добавляем слушатель для бесконечного скролла
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    
+                    val visibleItemCount = linearLayoutManager.childCount
+                    val totalItemCount = linearLayoutManager.itemCount
+                    val firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
+                    
+                    // Загружаем следующую страницу когда достигли конца списка
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount - 5
+                        && firstVisibleItemPosition >= 0) {
+                        viewModel.loadNextPage()
+                    }
                 }
-            } catch (e: Exception) {
-                Log.e("API", "Failed to load cars", e)
-                Toast.makeText(requireContext(), "Network error: ${e.message}", Toast.LENGTH_LONG).show()
-            }
+            })
         }
     }
 
-    private fun showErrorMessage(message: String) {
-        // Можно использовать Snackbar или Toast
-        // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun setupSwipeRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.loadCars()
+        }
+    }
+
+    private fun setupFilters() {
+        binding.btnFilters.setOnClickListener {
+            // Показать bottom sheet с фильтрами
+            showFiltersBottomSheet()
+        }
+    }
+
+    private fun showFiltersBottomSheet() {
+        val currentFilters = viewModel.getCurrentCarFilters()
+        val bottomSheet = FiltersBottomSheet.newInstance(currentFilters) { filters ->
+            viewModel.applyCarFilters(filters)
+        }
+        bottomSheet.show(parentFragmentManager, "filters")
     }
 
     private fun navigateToDetail(carId: Long) {

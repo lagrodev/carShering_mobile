@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -30,11 +31,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
@@ -42,39 +43,55 @@ android {
 }
 
 dependencies {
+    // Core Android
+    implementation libs.androidx.core.ktx.v1131
+    implementation libs.androidx.appcompat.v161
+    implementation libs.androidx.constraintlayout.v214
+    
+    // Fragment and Navigation
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
 
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.fragment:fragment-ktx:1.8.2'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
+    // Material Design 3
+    implementation libs.material
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'io.coil-kt:coil:2.5.0'
-    implementation 'com.google.android.material:material:1.11.0'
+    // Lifecycle components
+    //noinspection GradleDependency
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    //noinspection GradleDependency
+    implementation libs.androidx.lifecycle.livedata.ktx
+    //noinspection GradleDependency
+    implementation libs.androidx.lifecycle.runtime.ktx
 
+    // Coroutines
+    //noinspection NewerVersionAvailable
+    implementation libs.kotlinx.coroutines.android
+    //noinspection NewerVersionAvailable
+    implementation libs.kotlinx.coroutines.core
 
-
-    implementation 'androidx.core:core-ktx:1.13.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.fragment:fragment-ktx:1.8.2'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.7'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.7.7'
+    // DataStore for token storage
+    implementation libs.androidx.datastore.preferences
 
     // Retrofit + Gson
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation libs.retrofit
+    //noinspection NewerVersionAvailable
+    implementation libs.converter.gson
+    //noinspection NewerVersionAvailable
+    implementation libs.logging.interceptor
 
-    // Coil (для загрузки изображений)
-    implementation 'io.coil-kt:coil:2.5.0'
+    // Coil for image loading
+    //noinspection NewerVersionAvailable
+    implementation libs.coil
 
-    // Material Design
-    implementation 'com.google.android.material:material:1.11.0'
+    // SwipeRefreshLayout
+    implementation libs.androidx.swiperefreshlayout
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    // ViewPager2
+    implementation libs.androidx.viewpager2
+
+    // Testing
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit.v115
+    androidTestImplementation libs.androidx.espresso.core.v351
 }

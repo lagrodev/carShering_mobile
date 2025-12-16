@@ -8,13 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.carcatalogue.R
 import com.example.carcatalogue.data.model.CarListItemResponse
-import com.example.carcatalogue.databinding.ItemCarBinding
+import com.example.carcatalogue.databinding.ItemCarPremiumBinding
 
 class CarAdapter(private val onItemClick: (Long) -> Unit) :
     ListAdapter<CarListItemResponse, CarAdapter.CarViewHolder>(CarDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
-        val binding = ItemCarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemCarPremiumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CarViewHolder(binding)
     }
 
@@ -23,18 +23,39 @@ class CarAdapter(private val onItemClick: (Long) -> Unit) :
         holder.bind(item)
     }
 
-    inner class CarViewHolder(private val binding: ItemCarBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CarViewHolder(private val binding: ItemCarPremiumBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(car: CarListItemResponse) {
-            binding.carBrandModel.text = "${car.brand} ${car.model}"
-            binding.carYear.text = car.yearOfIssue.toString()
-            binding.carPrice.text = "${car.rent} ₽/day"
-
-            // Заглушка для изображения — можно заменить на реальный URL позже
-            binding.carImage.load("https://via.placeholder.com/150?text=${car.brand}+${car.model}") {
-                placeholder(R.drawable.ic_car_placeholder)
-                error(R.drawable.ic_car_placeholder)
+            // Название и модель
+            binding.tvCarName.text = "${car.brand} ${car.model}"
+            
+            // Год
+            binding.tvYear.text = car.yearOfIssue.toString()
+            
+            // Класс
+            binding.tvCarClass.text = car.carClass
+            
+            // Цена
+            binding.tvPrice.text = car.rent.toInt().toString()
+            
+            // Изображение - используем заглушку, т.к. CarListItemResponse не содержит imageUrl
+            binding.ivCarImage.load("https://via.placeholder.com/600x400/667eea/FFFFFF?text=${car.brand}+${car.model}") {
+                crossfade(true)
+                placeholder(R.drawable.ic_car)
+                error(R.drawable.ic_car)
+            }
+            
+            // Избранное
+            val favoriteIcon = if (car.favorite) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+            binding.fabFavorite.setImageResource(favoriteIcon)
+            
+            binding.fabFavorite.setOnClickListener {
+                // TODO: Toggle favorite
             }
 
+            binding.btnBookNow.setOnClickListener {
+                onItemClick(car.id)
+            }
+            
             binding.root.setOnClickListener {
                 onItemClick(car.id)
             }

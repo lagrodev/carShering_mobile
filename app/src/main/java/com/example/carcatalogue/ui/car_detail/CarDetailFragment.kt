@@ -4,25 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.example.carcatalogue.R
-import com.example.carcatalogue.data.api.RetrofitClient
 import com.example.carcatalogue.data.model.CarDetailResponse
-import com.example.carcatalogue.databinding.FragmentCarDetailBinding
-import kotlinx.coroutines.*
+import com.example.carcatalogue.databinding.FragmentCarDetailVibrantBinding
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class CarDetailFragment : Fragment() {
 
-    private var _binding: FragmentCarDetailBinding? = null
+    private var _binding: FragmentCarDetailVibrantBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: CarDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCarDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentCarDetailVibrantBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,47 +36,86 @@ class CarDetailFragment : Fragment() {
 
         val carId = arguments?.getLong("carId") ?: return
 
-        loadCarDetails(carId)
+        setupToolbar()
+        viewModel.loadCarDetails(carId)
+        observeViewModel(carId)
 
-        binding.rentButton.setOnClickListener {
-            // TODO: Реализовать логику аренды
+        binding.btnBook.setOnClickListener {
+            handleBooking(carId)
         }
     }
 
-    private fun loadCarDetails(carId: Long) {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val response = RetrofitClient.apiService.getCarDetail(carId)
-                if (response.isSuccessful && response.body() != null) {
-                    displayCar(response.body()!!)
-                } else {
-                    showError("Car not found")
+    private fun setupToolbar() {
+        binding.toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun observeViewModel(carId: Long) {
+        // Наблюдаем за состоянием загрузки
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.uiState.collectLatest { state ->
+                when (state) {
+                    is CarDetailUiState.Loading -> {
+                        binding.progressBar.isVisible = true
+                    }
+                    is CarDetailUiState.Success -> {
+                        binding.progressBar.isVisible = false
+                        displayCar(state.car)
+                    }
+                    is CarDetailUiState.Error -> {
+                        binding.progressBar.isVisible = false
+                        showError(state.message)
+                    }
                 }
-            } catch (e: Exception) {
-                showError("Error loading car: ${e.message}")
+            }
+        }
+
+        // Наблюдаем за статусом избранного
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.isFavorite.collectLatest { isFavorite ->
+                val icon = if (isFavorite) {
+                    R.drawable.ic_favorite
+                } else {
+                    R.drawable.ic_favorite_border
+                }
+                // binding.fabFavorite.setImageResource(icon)
             }
         }
     }
 
-    private fun displayCar(car: CarDetailResponse) {
-        binding.detailBrandModel.text = "${car.brand} ${car.model}"
-        binding.detailBodyType.text = "Body: ${car.bodyType}"
-        binding.detailClass.text = "Class: ${car.carClass}"
-        binding.detailYear.text = "Year: ${car.yearOfIssue}"
-        binding.detailRent.text = "${car.rent} ₽/day"
-        binding.detailGosNumber.text = "Gos Number: ${car.gosNumber}"
-        binding.detailVin.text = "VIN: ${car.vin}"
-        binding.detailStatus.text = "Status: ${car.status}"
+    private fun handleBooking(carId: Long) {
+        // TODO: Проверить даты и создать контракт
+        val contractRequest = viewModel.createContract(carId, 5000.0) // Временно
+        if (contractRequest != null) {
+            // Создать контракт через API
+        } else {
+            showError("Выберите даты аренды")
+        }
+    }
 
-        binding.detailCarImage.load("https://via.placeholder.com/400x200?text=${car.brand}+${car.model}") {
-            placeholder(R.drawable.ic_car_placeholder)
-            error(R.drawable.ic_car_placeholder)
+    private fun loadCarDetails(carId: Long) {
+        // Метод больше не нужен - используется ViewModel
+    }
+
+    private fun displayCar(car: CarDetailResponse) {
+        binding.tvCarName.text = "${car.brand} ${car.model}"
+        binding.tvYear.text = "${car.yearOfIssue}"
+        binding.tvCarClass.text = car.carClass
+        binding.tvBodyType.text = car.bodyType
+        binding.tvGosNumber.text = car.gosNumber
+        binding.tvPrice.text = String.format("%.0f", car.rent)
+        
+        binding.collapsingToolbar.title = "${car.brand} ${car.model}"
+
+        binding.ivCarImage.load("https://via.placeholder.com/400x200?text=${car.brand}+${car.model}") {
+            crossfade(true)
+            error(R.drawable.ic_car)
         }
     }
 
     private fun showError(message: String) {
-        // Например, через Snackbar или Toast
-        // Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        android.widget.Toast.makeText(requireContext(), message, android.widget.Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

@@ -1,3 +1,103 @@
 <resources>
-    <string name="app_name">CarShering</string>
+    <string name="app_name">CarSharing</string>
+    
+    <!-- Authentication -->
+    <string name="login">Войти</string>
+    <string name="register">Регистрация</string>
+    <string name="auth_tagline">Каршеринг нового уровня</string>
+    <string name="auth_subtitle">Выбирай авто • Бронируй • Поезжай</string>
+    <string name="logout">Выйти</string>
+    <string name="username">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="email">Email</string>
+    <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="phone">Телефон</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="have_account">Уже есть аккаунт?</string>
+    
+    <!-- Navigation -->
+    <string name="nav_catalogue">Каталог</string>
+    <string name="nav_contracts">Аренда</string>
+    <string name="nav_profile">Профиль</string>
+    
+    <!-- Catalogue -->
+    <string name="search_cars">Поиск машин</string>
+    <string name="filters">Фильтры</string>
+    <string name="apply_filters">Применить</string>
+    <string name="clear_filters">Очистить</string>
+    <string name="brand">Бренд</string>
+    <string name="model">Модель</string>
+    <string name="year">Год</string>
+    <string name="body_type">Тип кузова</string>
+    <string name="car_class">Класс</string>
+    <string name="price_per_day">₽/день</string>
+    <string name="available">Доступна</string>
+    <string name="rented">Арендована</string>
+    <string name="maintenance">На обслуживании</string>
+    
+    <!-- Car Details -->
+    <string name="car_details">Детали автомобиля</string>
+    <string name="rent_car">Арендовать</string>
+    <string name="vin_number">VIN</string>
+    <string name="license_plate">Гос. номер</string>
+    <string name="status">Статус</string>
+    
+    <!-- Contracts -->
+    <string name="my_contracts">Мои аренды</string>
+    <string name="create_contract">Создать аренду</string>
+    <string name="contract_details">Детали аренды</string>
+    <string name="start_date">Дата начала</string>
+    <string name="end_date">Дата окончания</string>
+    <string name="total_cost">Общая стоимость</string>
+    <string name="cancel_contract">Отменить аренду</string>
+    <string name="contract_active">Активна</string>
+    <string name="contract_pending">Ожидает подтверждения</string>
+    <string name="contract_completed">Завершена</string>
+    <string name="contract_cancelled">Отменена</string>
+    
+    <!-- Profile -->
+    <string name="profile">Профиль</string>
+    <string name="edit_profile">Редактировать профиль</string>
+    <string name="change_password">Сменить пароль</string>
+    <string name="documents">Документы</string>
+    <string name="old_password">Старый пароль</string>
+    <string name="new_password">Новый пароль</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    
+    <!-- Documents -->
+    <string name="document_type">Тип документа</string>
+    <string name="series">Серия</string>
+    <string name="number">Номер</string>
+    <string name="issue_date">Дата выдачи</string>
+    <string name="issuing_authority">Орган выдачи</string>
+    <string name="verified">Проверен</string>
+    <string name="not_verified">Не проверен</string>
+    <string name="add_document">Добавить документ</string>
+    
+    <!-- Common -->
+    <string name="loading">Загрузка…</string>
+    <string name="error">Ошибка</string>
+    <string name="success">Успешно</string>
+    <string name="ok">OK</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="confirm">Подтвердить</string>
+    <string name="no_data">Нет данных</string>
+    <string name="retry">Повторить</string>
+    
+    <!-- Error messages -->
+    <string name="error_network">Ошибка сети</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="error_auth">Ошибка авторизации</string>
+    <string name="error_invalid_credentials">Неверный логин или пароль</string>
+    <string name="error_required_field">Обязательное поле</string>
+    <string name="error_invalid_email">Неверный формат email</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="error_password_short">Пароль должен содержать минимум 6 символов</string>
 </resources>

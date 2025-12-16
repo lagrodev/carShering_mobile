@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="default_year_range">
+        <item>2015</item>
+        <item>2025</item>
+    </array>
+    
+    <array name="default_price_range">
+        <item>1000</item>
+        <item>10000</item>
+    </array>
+</resources>
