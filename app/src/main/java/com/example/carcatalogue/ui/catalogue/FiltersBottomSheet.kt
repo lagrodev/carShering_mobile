@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.carcatalogue.R
 import com.example.carcatalogue.databinding.BottomSheetFiltersBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
@@ -46,7 +49,46 @@ class FiltersBottomSheet : BottomSheetDialogFragment() {
         applyCurrentFilters()
     }
 
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog as? BottomSheetDialog ?: return
+        val bottomSheet = dialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet) ?: return
+        val behavior = BottomSheetBehavior.from(bottomSheet)
+
+        // Make sure the sheet can actually grow: if its container stays WRAP_CONTENT,
+        // some devices/layouts end up showing only the bottom-most view.
+        bottomSheet.layoutParams = bottomSheet.layoutParams.apply {
+            height = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+
+        behavior.isFitToContents = true
+        behavior.skipCollapsed = true
+        behavior.peekHeight = resources.displayMetrics.heightPixels
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
     private fun observeViewModel() {
+        // Загрузка брендов  из API
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.brands.collect { brands ->
+                binding.chipGroupBrand.removeAllViews()
+                brands.forEach { brand ->
+                    val chip = createChip(brand)
+                    binding.chipGroupBrand.addView(chip)
+                }
+                // Восстановить выбранный класс если есть
+                currentFilters?.brand?.let { selectedClass ->
+                    (0 until binding.chipGroupBrand.childCount).forEach { i ->
+                        val chip = binding.chipGroupBrand.getChildAt(i) as? Chip
+                        if (chip?.text == selectedClass) {
+                            chip.isChecked = true
+                        }
+                    }
+                }
+            }
+        }
+
+
         // Загрузка классов автомобилей из API
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.carClasses.collect { classes ->
@@ -237,6 +279,11 @@ class FiltersBottomSheet : BottomSheetDialogFragment() {
             binding.chipGroupBodyType.findViewById<Chip>(checkedBodyTypeChipId)?.text?.toString()
         } else null
 
+        val checkedBrandChipId = binding.chipGroupBrand.checkedChipId
+        val brand = if (checkedBrandChipId != View.NO_ID) {
+            binding.chipGroupBrand.findViewById<Chip>(checkedBrandChipId)?.text?.toString()
+        } else null
+
         val yearValues = binding.sliderYear.values
         val minYear = yearValues[0].toInt()
         val maxYear = yearValues[1].toInt()
@@ -246,7 +293,7 @@ class FiltersBottomSheet : BottomSheetDialogFragment() {
         val maxCell = priceValues[1].toInt()
 
         return CarFilters(
-            brand = null,
+            brand = brand,
             model = null,
             minYear = minYear.takeIf { it > 2000 },
             maxYear = maxYear.takeIf { it < 2025 },

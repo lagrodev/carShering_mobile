@@ -28,6 +28,7 @@ object RetrofitClient {
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
+        .cookieJar(InMemoryCookieJar())
         .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
         .build()

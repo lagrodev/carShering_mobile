@@ -15,14 +15,17 @@ data class ContractResponse(
     @SerializedName("endDate") val endDate: String,
     @SerializedName("vin") val vin: String,
     @SerializedName("gosNumber") val gosNumber: String,
-    @SerializedName("state") val state: ContractState
+    @SerializedName("state") val state: ContractState?
 )
 
 enum class ContractState {
     @SerializedName("PENDING") PENDING,
+    @SerializedName("CONFIRMED") CONFIRMED,
     @SerializedName("ACTIVE") ACTIVE,
     @SerializedName("COMPLETED") COMPLETED,
     @SerializedName("CANCELLED") CANCELLED,
+    @SerializedName("CANCELLATION_REQUESTED") CANCELLATION_REQUESTED,
+    // backward-compat if backend ever used this name
     @SerializedName("AWAITING_CANCELLATION") AWAITING_CANCELLATION
 }
 

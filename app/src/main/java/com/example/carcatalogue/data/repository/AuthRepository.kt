@@ -7,6 +7,8 @@ import retrofit2.Response
 class AuthRepository(private val apiService: ApiService) {
     
     suspend fun authenticate(username: String, password: String): Response<Unit> {
+        // Server sets access_token/refresh_token via Set-Cookie (HttpOnly).
+        // OkHttp CookieJar keeps cookies for subsequent /api/* requests.
         return apiService.login(AuthRequest(username, password))
     }
     

@@ -47,6 +47,8 @@
     
     <!-- Contracts -->
     <string name="my_contracts">Мои аренды</string>
+    <string name="contracts_subtitle">Управляйте активными арендами и выбирайте авто для новой</string>
+    <string name="browse_cars">Выбрать авто</string>
     <string name="create_contract">Создать аренду</string>
     <string name="contract_details">Детали аренды</string>
     <string name="start_date">Дата начала</string>
@@ -55,8 +57,13 @@
     <string name="cancel_contract">Отменить аренду</string>
     <string name="contract_active">Активна</string>
     <string name="contract_pending">Ожидает подтверждения</string>
+    <string name="contract_confirmed">Подтверждена</string>
     <string name="contract_completed">Завершена</string>
     <string name="contract_cancelled">Отменена</string>
+    <string name="contract_cancellation_requested">Запрошена отмена</string>
+    <string name="contract_unknown">Неизвестно</string>
+
+    <string name="contracts_empty">У вас пока нет аренд</string>
     
     <!-- Profile -->
     <string name="profile">Профиль</string>

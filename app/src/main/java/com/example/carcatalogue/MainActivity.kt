@@ -45,11 +45,12 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.loginFragment,
                 R.id.registerFragment,
-                R.id.carDetailFragment -> {
-                    bottomNavigation.visibility = View.GONE
+                R.id.carDetailFragment,
+                R.id.contractDetailFragment   -> {
+                    bottomNavigation.visibility = View.GONE // тут детальная инфа, нам не нужна навигационная  панель
                 }
                 else -> {
-                    bottomNavigation.visibility = View.VISIBLE
+                    bottomNavigation.visibility = View.VISIBLE // во  всех остальных нужна
                 }
             }
         }

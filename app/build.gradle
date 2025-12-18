@@ -33,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
         jvmTarget = '17'
@@ -43,6 +44,12 @@ android {
 }
 
 dependencies {
+    implementation libs.androidx.work.runtime.ktx
+    coreLibraryDesugaring libs.desugar.jdk.libs
+
+    // Keep Kotlin stdlib versions consistent with the Kotlin Gradle plugin
+    implementation platform("org.jetbrains.kotlin:kotlin-bom:1.9.22")
+
     // Core Android
     implementation libs.androidx.core.ktx.v1131
     implementation libs.androidx.appcompat.v161

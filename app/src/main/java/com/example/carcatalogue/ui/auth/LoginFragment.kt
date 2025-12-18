@@ -88,9 +88,6 @@ class LoginFragment : Fragment() {
                 is Result.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnLogin.isEnabled = true
-                    
-                    // Login successful - token is set in cookies/headers by the server
-                    // Save username and fetch profile
                     lifecycleScope.launch {
                         val username = binding.etUsername.text.toString().trim()
                         tokenManager.saveUserName(username)

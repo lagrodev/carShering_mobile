@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_contractsFragment_to_contractDetailFragment"
             app:destination="@id/contractDetailFragment" />
+        <action
+            android:id="@+id/action_contractsFragment_to_catalogueFragment"
+            app:destination="@id/catalogueFragment" />
     </fragment>
 
     <fragment
@@ -71,6 +74,10 @@
         <argument
             android:name="carId"
             app:argType="long" />
+        <argument
+            android:name="dailyRate"
+            android:defaultValue="0.0"
+            app:argType="float" />
     </fragment>
 
     <fragment

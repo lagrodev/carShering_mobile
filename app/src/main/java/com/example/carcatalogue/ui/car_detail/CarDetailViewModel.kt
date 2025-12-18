@@ -114,11 +114,11 @@ class CarDetailViewModel(
         
         if (start == null || end == null) return null
         
-        return CreateContractRequest(
-            carId = carId,
-            dataStart = start,
-            dataEnd = end,
-            dailyRate = dailyRate
+            return CreateContractRequest(
+                carId = carId,
+                dataStart = start,
+                dataEnd = end,
+                dailyRate = dailyRate
         )
     }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.carcatalogue.R
 import com.example.carcatalogue.data.api.RetrofitClient
 import com.example.carcatalogue.databinding.FragmentContractsBinding
 import kotlinx.coroutines.launch
@@ -37,7 +38,17 @@ class ContractsFragment : Fragment() {
         
         setupRecyclerView()
         setupSwipeRefresh()
+        setupCta()
         loadContracts()
+    }
+
+    private fun setupCta() {
+        binding.btnBrowseCars.setOnClickListener {
+            findNavController().navigate(R.id.action_contractsFragment_to_catalogueFragment)
+        }
+        binding.btnBrowseCarsEmpty.setOnClickListener {
+            findNavController().navigate(R.id.action_contractsFragment_to_catalogueFragment)
+        }
     }
     
     private fun setupRecyclerView() {
@@ -79,8 +90,13 @@ class ContractsFragment : Fragment() {
                 } else {
                     val errorBody = response.errorBody()?.string()
                     Log.e("ContractsFragment", "API Error: ${response.code()} - $errorBody")
-                    Toast.makeText(requireContext(), "Ошибка загрузки контрактов: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    showEmptyState()
+                    if (response.code() == 401) {
+                        Toast.makeText(requireContext(), "Нужно войти", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.loginFragment)
+                    } else {
+                        Toast.makeText(requireContext(), "Ошибка загрузки контрактов: ${response.code()}", Toast.LENGTH_SHORT).show()
+                        showEmptyState()
+                    }
                 }
             } catch (e: Exception) {
                 binding.swipeRefresh.isRefreshing = false

@@ -1,5 +1,7 @@
 package com.example.carcatalogue.data.model
 
+import com.google.gson.annotations.SerializedName
+
 // Authentication
 data class JwtRequest(
     val username: String,
@@ -7,7 +9,7 @@ data class JwtRequest(
 )
 
 data class JwtResponse(
-    val token: String
+    @SerializedName("token") val token: String?
 )
 
 
