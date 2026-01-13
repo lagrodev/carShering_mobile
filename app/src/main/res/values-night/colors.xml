@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark palette overrides (keeps the same color names used across layouts) -->
-    <color name="primary">#818CF8</color>
-    <color name="primary_dark">#6366F1</color>
-    <color name="primary_light">#A5B4FC</color>
+    <!-- Modern Dark Mode Palette (Ocean Blue + Coral) -->
+    <color name="primary">#64B5F6</color>        <!-- Lighter Ocean Blue for dark mode -->
+    <color name="primary_dark">#1976D2</color>   
+    <color name="primary_light">#90CAF9</color>
 
-    <color name="accent">#FB923C</color>
-    <color name="accent_light">#FED7AA</color>
+    <color name="accent">#FF8A80</color>         <!-- Soft Coral for dark mode -->
+    <color name="accent_light">#FFAB91</color>
 
     <color name="on_primary">#0B1220</color>
-    <color name="primary_container">#1E1B4B</color>
-    <color name="on_primary_container">#E6EAF2</color>
+    <color name="primary_container">#1A2332</color>
+    <color name="on_primary_container">#E3F2FD</color>
 
     <color name="on_accent">#0B1220</color>
-    <color name="accent_container">#431407</color>
-    <color name="on_accent_container">#FFE7D1</color>
+    <color name="accent_container">#3E2723</color>
+    <color name="on_accent_container">#FFCCBC</color>
 
     <color name="background">#0B1220</color>
     <color name="background_secondary">#0F172A</color>
     <color name="surface">#0F172A</color>
-    <color name="surface_variant">#111C2E</color>
+    <color name="surface_variant">#1A2332</color>
 
     <color name="text_primary">#E6EAF2</color>
     <color name="text_secondary">#A7B0C0</color>
     <color name="text_hint">#6B7280</color>
 
-    <color name="divider">#243145</color>
-    <color name="border">#2B3B52</color>
+    <color name="success">#4CAF50</color>
+    <color name="warning">#FFA726</color>
+    <color name="error">#EF5350</color>
+    <color name="info">#42A5F5</color>
+
+    <color name="divider">#1E293B</color>
+    <color name="border">#334155</color>
+
+    <color name="overlay_dark">#B0000000</color>
+    <color name="overlay_light">#20FFFFFF</color>
+    <color name="overlay_gradient">#E01A1F36</color>
 
     <color name="favorite">@color/accent</color>
     <color name="chip_background">@color/surface_variant</color>
+    
+    <color name="card_background">#0F172A</color>
+    <color name="card_highlighted">#1A2332</color>
 
     <!-- Gradients tuned for dark mode -->
-    <color name="gradient_primary_start">#2B2D74</color>
-    <color name="gradient_primary_end">#4C1D95</color>
-    <color name="gradient_surface_start">#111827</color>
-    <color name="gradient_surface_center">#0F172A</color>
+    <color name="gradient_start">#1976D2</color>
+    <color name="gradient_mid">#00ACC1</color>
+    <color name="gradient_end">#00897B</color>
+    
+    <color name="gradient_card_start">#5E35B1</color>
+    <color name="gradient_card_end">#512DA8</color>
+
+    <color name="header_gradient_start">#1976D2</color>
+    <color name="header_gradient_end">#00ACC1</color>
+
+    <color name="gradient_primary_start">#1976D2</color>
+    <color name="gradient_primary_end">#00ACC1</color>
+    <color name="gradient_surface_start">#0F172A</color>
+    <color name="gradient_surface_center">#1A2332</color>
     <color name="gradient_surface_end">#0B1220</color>
 </resources>

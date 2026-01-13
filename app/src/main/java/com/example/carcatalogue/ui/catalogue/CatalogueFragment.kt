@@ -26,9 +26,10 @@ class CatalogueFragment : Fragment() {
 
     private val viewModel: CatalogueViewModel by viewModels()
 
-    private val adapter = CarAdapter { carId ->
-        navigateToDetail(carId)
-    }
+    private val adapter = CarAdapter(
+        onItemClick = { carId -> navigateToDetail(carId) },
+        onFavoriteClick = { carId, isFavorite -> viewModel.toggleFavorite(carId, isFavorite) }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,

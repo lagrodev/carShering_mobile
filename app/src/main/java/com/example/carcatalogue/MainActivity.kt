@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity() {
 
         tokenManager = TokenManager(this)
         
+        // Инициализируем RetrofitClient с контекстом для поддержки refresh токенов
+        RetrofitClient.initialize(this)
+        
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -46,11 +49,17 @@ class MainActivity : AppCompatActivity() {
                 R.id.loginFragment,
                 R.id.registerFragment,
                 R.id.carDetailFragment,
-                R.id.contractDetailFragment   -> {
-                    bottomNavigation.visibility = View.GONE // тут детальная инфа, нам не нужна навигационная  панель
+                R.id.contractDetailFragment -> {
+                    bottomNavigation.visibility = View.GONE
+                }
+                R.id.catalogueFragment,
+                R.id.contractsFragment,
+                R.id.favoritesFragment,
+                R.id.profileFragment -> {
+                    bottomNavigation.visibility = View.VISIBLE
                 }
                 else -> {
-                    bottomNavigation.visibility = View.VISIBLE // во  всех остальных нужна
+                    bottomNavigation.visibility = View.VISIBLE
                 }
             }
         }

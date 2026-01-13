@@ -4,56 +4,74 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Brand palette (Aurora) -->
-    <color name="primary">#4F46E5</color>
-    <color name="primary_dark">#3730A3</color>
-    <color name="primary_light">#A5B4FC</color>
+    <!-- Modern Premium Palette (Ocean Blue + Coral Sunset) -->
+    <!-- Inspired by modern fintech and premium car apps -->
+    <color name="primary">#0A84FF</color>        <!-- Vibrant Ocean Blue -->
+    <color name="primary_dark">#0051D5</color>   <!-- Deep Ocean -->
+    <color name="primary_light">#64B5F6</color>  <!-- Sky Blue -->
 
-    <color name="accent">#F97316</color>
-    <color name="accent_light">#FDBA74</color>
+    <color name="accent">#FF6B6B</color>         <!-- Coral Sunset -->
+    <color name="accent_light">#FF9A9A</color>   <!-- Soft Coral -->
 
-    <!-- Material-ish semantic helpers (used by theme + drawables) -->
+    <!-- Gradient Colors for Premium Effects -->
+    <color name="gradient_start">#0A84FF</color>     <!-- Ocean Blue -->
+    <color name="gradient_mid">#00C9FF</color>       <!-- Aqua -->
+    <color name="gradient_end">#92FE9D</color>       <!-- Mint Green -->
+    
+    <color name="gradient_card_start">#667EEA</color>   <!-- Purple -->
+    <color name="gradient_card_end">#764BA2</color>     <!-- Deep Purple -->
+
+    <!-- Material-ish semantic helpers -->
     <color name="on_primary">@color/white</color>
-    <color name="primary_container">#EEF2FF</color>
-    <color name="on_primary_container">#111827</color>
+    <color name="primary_container">#E3F2FD</color>     <!-- Light Blue Container -->
+    <color name="on_primary_container">#01579B</color>
 
     <color name="on_accent">@color/white</color>
-    <color name="accent_container">#FFF7ED</color>
-    <color name="on_accent_container">#111827</color>
+    <color name="accent_container">#FFEBEE</color>      <!-- Light Coral Container -->
+    <color name="on_accent_container">#B71C1C</color>
 
-    <!-- Surfaces -->
-    <color name="background">#F6F7FB</color>
-    <color name="background_secondary">#EEF2FF</color>
+    <!-- Modern Surfaces with slight tint -->
+    <color name="background">#F5F7FA</color>            <!-- Cool Gray Background -->
+    <color name="background_secondary">#E8EBF0</color>  <!-- Secondary Background -->
     <color name="surface">#FFFFFF</color>
-    <color name="surface_variant">#F1F5F9</color>
+    <color name="surface_variant">#F0F4F8</color>       <!-- Subtle Surface Variant -->
 
-    <!-- Text -->
-    <color name="text_primary">#0F172A</color>
-    <color name="text_secondary">#475569</color>
-    <color name="text_hint">#94A3B8</color>
+    <!-- Text - High Contrast for Readability -->
+    <color name="text_primary">#1A1F36</color>          <!-- Almost Black Blue -->
+    <color name="text_secondary">#6B7280</color>        <!-- Medium Gray -->
+    <color name="text_hint">#9CA3AF</color>             <!-- Light Gray -->
 
-    <!-- Status -->
-    <color name="success">#22C55E</color>
-    <color name="warning">#F59E0B</color>
-    <color name="error">#EF4444</color>
-    <color name="info">#3B82F6</color>
+    <!-- Status Colors - Modern & Bold -->
+    <color name="success">#10B981</color>               <!-- Emerald Green -->
+    <color name="warning">#F59E0B</color>               <!-- Amber -->
+    <color name="error">#EF4444</color>                 <!-- Red -->
+    <color name="info">#3B82F6</color>                  <!-- Blue -->
 
     <!-- Dividers / borders -->
-    <color name="divider">#E2E8F0</color>
-    <color name="border">#E5E7EB</color>
+    <color name="divider">#E5E7EB</color>
+    <color name="border">#D1D5DB</color>
 
     <!-- Overlay -->
     <color name="overlay_dark">#80000000</color>
     <color name="overlay_light">#40FFFFFF</color>
+    <color name="overlay_gradient">#B31A1F36</color>    <!-- Dark Gradient Overlay -->
 
     <!-- UI elements -->
     <color name="favorite">@color/accent</color>
+    
+    <!-- Card Backgrounds with subtle tints -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_highlighted">#F0F9FF</color>      <!-- Light Blue Tint -->
+    
+    <!-- Premium Header Gradient Colors -->
+    <color name="header_gradient_start">#0A84FF</color>
+    <color name="header_gradient_end">#00C9FF</color>
     <color name="chip_background">@color/surface_variant</color>
 
     <!-- Gradients (centralized so drawables stay consistent) -->
-    <color name="gradient_primary_start">#667EEA</color>
-    <color name="gradient_primary_end">#764BA2</color>
+    <color name="gradient_primary_start">#0A84FF</color>      <!-- Modern Ocean Blue -->
+    <color name="gradient_primary_end">#00C9FF</color>        <!-- Aqua -->
     <color name="gradient_surface_start">#FFFFFF</color>
-    <color name="gradient_surface_center">#F6F7FF</color>
-    <color name="gradient_surface_end">#EEF2FF</color>
+    <color name="gradient_surface_center">#F0F9FF</color>     <!-- Light Blue Tint -->
+    <color name="gradient_surface_end">#E3F2FD</color>        <!-- Sky Blue Tint -->
 </resources>

@@ -10,8 +10,18 @@ import com.example.carcatalogue.R
 import com.example.carcatalogue.data.model.CarListItemResponse
 import com.example.carcatalogue.databinding.ItemCarPremiumBinding
 
-class CarAdapter(private val onItemClick: (Long) -> Unit) :
+class CarAdapter(
+    private val onItemClick: (Long) -> Unit,
+    private val onFavoriteClick: ((Long, Boolean) -> Unit)? = null
+) :
     ListAdapter<CarListItemResponse, CarAdapter.CarViewHolder>(CarDiffCallback()) {
+
+    private val defaultPhotos = intArrayOf(
+        R.drawable.default_car_photo_1,
+        R.drawable.default_car_photo_2,
+        R.drawable.default_car_photo_3,
+        R.drawable.default_car_photo_4
+    )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding = ItemCarPremiumBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -37,11 +47,17 @@ class CarAdapter(private val onItemClick: (Long) -> Unit) :
             // Цена
             binding.tvPrice.text = car.rent.toInt().toString()
             
-            // Изображение - используем заглушку, т.к. CarListItemResponse не содержит imageUrl
-            binding.ivCarImage.load("https://via.placeholder.com/600x400/667eea/FFFFFF?text=${car.brand}+${car.model}") {
-                crossfade(true)
-                placeholder(R.drawable.ic_car)
-                error(R.drawable.ic_car)
+            // Изображение - загружаем из URL или показываем дефолтное "фото"
+            if (!car.imageUrl.isNullOrEmpty()) {
+                binding.ivCarImage.load(car.imageUrl) {
+                    crossfade(true)
+                    placeholder(defaultPhotoRes(car))
+                    error(defaultPhotoRes(car))
+                }
+            } else {
+                binding.ivCarImage.load(defaultPhotoRes(car)) {
+                    crossfade(false)
+                }
             }
             
             // Избранное
@@ -49,7 +65,7 @@ class CarAdapter(private val onItemClick: (Long) -> Unit) :
             binding.fabFavorite.setImageResource(favoriteIcon)
             
             binding.fabFavorite.setOnClickListener {
-                // TODO: Toggle favorite
+                onFavoriteClick?.invoke(car.id, car.favorite)
             }
 
             binding.btnBookNow.setOnClickListener {
@@ -58,6 +74,16 @@ class CarAdapter(private val onItemClick: (Long) -> Unit) :
             
             binding.root.setOnClickListener {
                 onItemClick(car.id)
+            }
+        }
+
+        private fun defaultPhotoRes(car: CarListItemResponse): Int {
+            return when (car.carClass.uppercase()) {
+                "ECONOMY" -> R.drawable.default_car_photo_3
+                "COMFORT" -> R.drawable.default_car_photo_1
+                "BUSINESS" -> R.drawable.default_car_photo_4
+                "PREMIUM", "LUXURY" -> R.drawable.default_car_photo_2
+                else -> defaultPhotos[(kotlin.math.abs(car.id) % defaultPhotos.size).toInt()]
             }
         }
     }

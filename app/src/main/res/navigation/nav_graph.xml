@@ -59,6 +59,18 @@
     </fragment>
 
     <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.example.carcatalogue.ui.favorites.FavoritesFragment"
+        android:label="Favorites">
+        <action
+            android:id="@+id/action_favoritesFragment_to_carDetailFragment"
+            app:destination="@id/carDetailFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_catalogueFragment"
+            app:destination="@id/catalogueFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/contractDetailFragment"
         android:name="com.example.carcatalogue.ui.contracts.ContractDetailFragment"
         android:label="Contract Details">
@@ -85,10 +97,26 @@
         android:name="com.example.carcatalogue.ui.profile.ProfileFragment"
         android:label="Profile">
         <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.carcatalogue.ui.profile.EditProfileFragment"
+        android:label="Edit Profile" />
+
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.carcatalogue.ui.profile.ChangePasswordFragment"
+        android:label="Change Password" />
 
 </navigation>

@@ -17,10 +17,10 @@ import java.util.Date
 
 @Parcelize
 data class CarFilters(
-    val brand: String? = null,
+    val brands: List<String> = emptyList(),
     val model: String? = null,
     val bodyType: String? = null,
-    val carClass: String? = null,
+    val carClasses: List<String> = emptyList(),
     val minYear: Int? = null,
     val maxYear: Int? = null,
     val minCell: Int? = null,
@@ -31,10 +31,10 @@ data class CarFilters(
 
 @Parcelize
 data class CatalogueFilters(
-    val brand: String? = null,
+    val brands: List<String> = emptyList(),
     val model: String? = null,
     val bodyType: String? = null,
-    val carClass: String? = null,
+    val carClasses: List<String> = emptyList(),
     val minYear: Int? = null,
     val maxYear: Int? = null,
     val minPrice: Double? = null,
@@ -111,12 +111,12 @@ class CatalogueViewModel(
             try {
                 val currentFilters = _filters.value
                 val response = repository.getCatalogue(
-                    brand = currentFilters.brand,
+                    brands = currentFilters.brands.takeIf { it.isNotEmpty() },
                     model = currentFilters.model,
                     minYear = currentFilters.minYear,
                     maxYear = currentFilters.maxYear,
                     bodyType = currentFilters.bodyType,
-                    carClass = currentFilters.carClass,
+                    carClasses = currentFilters.carClasses.takeIf { it.isNotEmpty() },
                     dateStart = currentFilters.dateStart,
                     dateEnd = currentFilters.dateEnd,
                     minCell = currentFilters.minPrice,
@@ -157,10 +157,10 @@ class CatalogueViewModel(
 
     fun applyCarFilters(carFilters: CarFilters) {
         val catalogueFilters = CatalogueFilters(
-            brand = carFilters.brand,
+            brands = carFilters.brands,
             model = carFilters.model,
             bodyType = carFilters.bodyType,
-            carClass = carFilters.carClass,
+            carClasses = carFilters.carClasses,
             minYear = carFilters.minYear,
             maxYear = carFilters.maxYear,
             minPrice = carFilters.minCell?.toDouble(),
@@ -175,10 +175,10 @@ class CatalogueViewModel(
     fun getCurrentCarFilters(): CarFilters {
         val f = _filters.value
         return CarFilters(
-            brand = f.brand,
+            brands = f.brands,
             model = f.model,
             bodyType = f.bodyType,
-            carClass = f.carClass,
+            carClasses = f.carClasses,
             minYear = f.minYear,
             maxYear = f.maxYear,
             minCell = f.minPrice?.toInt(),
@@ -276,10 +276,10 @@ class CatalogueViewModel(
     fun getActiveFiltersCount(): Int {
         val f = _filters.value
         var count = 0
-        if (f.brand != null) count++
+        if (f.brands.isNotEmpty()) count++
         if (f.model != null) count++
         if (f.bodyType != null) count++
-        if (f.carClass != null) count++
+        if (f.carClasses.isNotEmpty()) count++
         if (f.minYear != null || f.maxYear != null) count++
         if (f.minPrice != null || f.maxPrice != null) count++
         if (f.dateStart != null || f.dateEnd != null) count++
@@ -288,6 +288,22 @@ class CatalogueViewModel(
 
     override fun onCleared() {
         super.onCleared()
+    }
+
+    fun toggleFavorite(carId: Long, isFavorite: Boolean) {
+        viewModelScope.launch {
+            try {
+                if (isFavorite) {
+                    repository.removeFavorite(carId)
+                } else {
+                    repository.addFavorite(carId)
+                }
+                // Refresh current page to update favorite status
+                loadCars(resetPage = true)
+            } catch (e: Exception) {
+                // Handle error silently or show toast
+            }
+        }
     }
 
     companion object {

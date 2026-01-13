@@ -10,7 +10,8 @@ data class CarListItemResponse(
     @SerializedName("yearOfIssue") val yearOfIssue: Int,
     @SerializedName("rent") val rent: Double,
     @SerializedName("status") val status: String,
-    @SerializedName("favorite") val favorite: Boolean = false
+    @SerializedName("favorite") val favorite: Boolean = false,
+    @SerializedName("imageUrl") val imageUrl: String? = null
 )
 
 data class CarDetailResponse(

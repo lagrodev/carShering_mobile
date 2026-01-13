@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_gradient_accent" />
+
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#00000000"
+                android:endColor="@color/overlay_gradient"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <item android:gravity="center">
+        <bitmap
+            android:src="@drawable/ic_car"
+            android:gravity="center"
+            android:alpha="0.16" />
+    </item>
+</layer-list>

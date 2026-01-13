@@ -7,12 +7,12 @@ import retrofit2.Response
 class CarRepository(private val apiService: ApiService) {
     
     suspend fun getCatalogue(
-        brand: String? = null,
+        brands: List<String>? = null,
         model: String? = null,
         minYear: Int? = null,
         maxYear: Int? = null,
         bodyType: String? = null,
-        carClass: String? = null,
+        carClasses: List<String>? = null,
         dateStart: String? = null,
         dateEnd: String? = null,
         minCell: Double? = null,
@@ -22,12 +22,12 @@ class CarRepository(private val apiService: ApiService) {
         sort: String? = null
     ): Response<PagedModel<CarListItemResponse>> {
         return apiService.getCatalogue(
-            brand = brand,
+            brands = brands,
             model = model,
             minYear = minYear,
             maxYear = maxYear,
             bodyType = bodyType,
-            carClass = carClass,
+            carClasses = carClasses,
             dateStart = dateStart,
             dateEnd = dateEnd,
             minCell = minCell,
@@ -78,5 +78,26 @@ class CarRepository(private val apiService: ApiService) {
             dateStart = dateStart,
             dateEnd = dateEnd
         )
+    }
+    
+    // Favorites methods
+    suspend fun getFavorites(
+        page: Int = 0,
+        size: Int = 20,
+        sort: String? = null
+    ): Response<PagedModel<CarListItemResponse>> {
+        return apiService.getFavorites(page = page, size = size, sort = sort)
+    }
+    
+    suspend fun addFavorite(carId: Long): Response<CarListItemResponse> {
+        return apiService.addFavorite(carId)
+    }
+    
+    suspend fun removeFavorite(carId: Long): Response<Unit> {
+        return apiService.deleteFavorite(carId)
+    }
+    
+    suspend fun checkFavorite(carId: Long): Response<CarListItemResponse> {
+        return apiService.getFavorite(carId)
     }
 }

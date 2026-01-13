@@ -53,6 +53,11 @@ interface ApiService {
     
     @GET("api/verify")
     suspend fun verifyEmailToken(@Query("code") code: String): Response<Unit>
+
+    //  USER ANALYTICS
+
+    @GET("api/stats/overview/client")
+    suspend fun getOverviewStats(): Response<UserStats>
     
     //  DOCUMENTS 
     
@@ -72,12 +77,12 @@ interface ApiService {
     
     @GET("api/car/catalogue")
     suspend fun getCatalogue(
-        @Query("brand") brand: String? = null,
+        @Query("brand") brands: List<String>? = null,
         @Query("model") model: String? = null,
         @Query("minYear") minYear: Int? = null,
         @Query("maxYear") maxYear: Int? = null,
         @Query("body_type") bodyType: String? = null,
-        @Query("car_class") carClass: String? = null,
+        @Query("car_class") carClasses: List<String>? = null,
         @Query("date_start") dateStart: String? = null,
         @Query("date_end") dateEnd: String? = null,
         @Query("min_cell") minCell: Double? = null,
