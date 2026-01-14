@@ -134,6 +134,37 @@ BASE_URL = "https://your-api.example.com/"
 
 ---
 
+## Диаграммы
+
+### Use Case Diagram
+Все реализованные функции системы
+
+![Use Case](diagrams/usecase.png)
+
+### Sequence: Авторизация и каталог
+Процесс авторизации и загрузки каталога
+
+![Auth Sequence](diagrams/sequence_auth.png)
+
+### Sequence: Фильтрация
+Multi-select фильтры каталога
+
+![Filters Sequence](diagrams/sequence_filters.png)
+
+### Sequence: Создание аренды
+Процесс бронирования автомобиля
+
+![Rent Sequence](diagrams/sequence_rent.png)
+
+### Activity: Бизнес-процесс аренды
+Полный цикл аренды автомобиля
+
+![Rent Activity](diagrams/activity_rent.png)
+
+> **Исходники:** [diagrams/*.puml](diagrams/) — PlantUML файлы для редактирования
+
+---
+
 ## Демонстрация
 
 <video src="NVIDIA_Overlay_sEmivQz9gY.mp4" controls width="100%"></video>

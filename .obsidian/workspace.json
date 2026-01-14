@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "TECHNICAL_OVERVIEW.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "TECHNICAL_OVERVIEW"
             }
           }
         ]
@@ -183,12 +183,30 @@
       "bases:Создать новую базу": false
     }
   },
-  "active": "bceddd23fe507cec",
+  "active": "ce7086c47ae28ba0",
   "lastOpenFiles": [
+    "diagrams/usecase.png",
+    "diagrams/img.png",
+    "diagrams/sequence_rent.png",
+    "diagrams/sequence_filters.png",
+    "diagrams/sequence_auth.png",
+    "diagrams/activity_rent.png",
+    "PRESENTATION_SLIDES.md",
     "NVIDIA_Overlay_sEmivQz9gY.mp4",
     "README.md",
+    "TECHNICAL_OVERVIEW.md",
+    "diagrams/activity_rent.puml",
+    "diagrams/sequence_rent.puml",
+    "diagrams/sequence_filters.puml",
+    "diagrams/sequence_auth.puml",
+    "diagrams/usecase.puml",
+    "diagrams",
+    "PRESENTATION_GUIDE.md",
+    "COMMIT_CHANGES.md",
+    "app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_28eac56f6a118f5fc6862157c118dd3690184eb7904fe07a98c25fcc587f8a3e_bucket_10/graph.bin",
+    "app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/jar_28eac56f6a118f5fc6862157c118dd3690184eb7904fe07a98c25fcc587f8a3e_bucket_10",
+    "app/build/intermediates/desugar_graph/debug/dexBuilderDebug/out/currentProject/dirs_bucket_5/graph.bin",
     "demo/NVIDIA_Overlay_sEmivQz9gY.mp4.md",
-    "demo",
     "Pasted image 20260114014100.png",
     "description.md"
   ]

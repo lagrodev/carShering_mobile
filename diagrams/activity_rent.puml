@@ -1,0 +1,129 @@
+@startuml RentProcess
+!theme plain
+skinparam activityDiamondBackgroundColor #FAFAFA
+skinparam activityStartColor #4CAF50
+skinparam activityEndColor #F44336
+
+start
+
+:Открыть приложение;
+
+if (Авторизован?) then (нет)
+    :Вход/Регистрация;
+    note right
+        LoginFragment/RegisterFragment
+        Сохранение токена в DataStore
+    end note
+else (да)
+endif
+
+:Просмотр каталога;
+note right
+    CatalogueFragment
+    Pull-to-refresh
+    Lazy loading
+end note
+
+if (Применить фильтры?) then (да)
+    :Выбор брендов/классов;
+    note right
+        FiltersBottomSheet
+        Multi-select чипы
+        Material Design 3
+    end note
+    
+    :Применить фильтры;
+    note right
+        Query параметры:
+        brand=[BMW,Audi]
+        car_class=[Premium]
+    end note
+else (нет)
+endif
+
+:Выбор автомобиля;
+
+:Просмотр деталей;
+note right
+    CarDetailFragment
+    Coil для загрузки фото
+    Fallback на default_car_photo
+end note
+
+if (Добавить в избранное?) then (да)
+    :Сохранить в избранное;
+    note right
+        FavoritesFragment
+        Синхронизация с backend
+    end note
+else (нет)
+endif
+
+if (Арендовать?) then (нет)
+    :Вернуться к каталогу;
+    stop
+else (да)
+    :Выбор дат аренды;
+    
+    :Создание контракта;
+    note right
+        POST /api/contracts
+        Repository pattern
+        Coroutines для async
+    end note
+    
+    if (Авто доступно?) then (нет)
+        :Показать ошибку;
+        note right
+            Error 409 Conflict
+            Toast с сообщением
+        end note
+        :Выбрать другие даты;
+        stop
+    else (да)
+        :Контракт создан\nStatus: PENDING;
+        note right
+            Сохранён на backend
+            Отображается в списке
+        end note
+        
+        :Ожидание подтверждения;
+        
+        if (Подтверждён?) then (да)
+            :Status: ACTIVE;
+            note right
+                Push-уведомление
+                (в roadmap)
+            end note
+            
+            :Использование авто;
+            
+            repeat
+                :Поездка;
+            repeat while (Завершить аренду?) is (нет)
+            -> да;
+            
+            :Status: COMPLETED;
+            note right
+                Автоматический расчёт
+                стоимости на backend
+            end note
+            
+            :Обновление статистики;
+            note right
+                GET /api/stats/overview/client
+                Обновление ProfileFragment
+            end note
+        else (отменён)
+            :Status: CANCELLED;
+            note right
+                DELETE /api/contracts/{id}/cancel
+                Возврат средств (если оплачено)
+            end note
+        endif
+    endif
+endif
+
+stop
+
+@enduml

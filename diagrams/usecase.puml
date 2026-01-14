@@ -1,0 +1,65 @@
+@startuml UseCase
+!theme plain
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+
+left to right direction
+
+actor "Пользователь" as User
+
+package "ZipGo System" {
+    package "Авторизация" #E3F2FD {
+        usecase UC1 as "Создать аккаунт"
+        usecase UC2 as "Войти в систему"
+        usecase UC3 as "Выйти из системы"
+    }
+    
+    package "Каталог" #E8F5E9 {
+        usecase UC4 as "Просмотреть каталог"
+        usecase UC5 as "Применить фильтры\n(multi-select)"
+        usecase UC6 as "Посмотреть детали авто"
+    }
+    
+    package "Избранное" #FFF3E0 {
+        usecase UC7 as "Добавить в избранное"
+        usecase UC8 as "Просмотреть избранное"
+    }
+    
+    package "Аренда" #FCE4EC {
+        usecase UC9 as "Создать аренду"
+        usecase UC10 as "Просмотреть контракты"
+        usecase UC11 as "Отменить аренду"
+    }
+    
+    package "Профиль" #F3E5F5 {
+        usecase UC12 as "Просмотреть профиль"
+        usecase UC13 as "Редактировать профиль"
+        usecase UC14 as "Сменить пароль"
+        usecase UC15 as "Просмотреть статистику"
+    }
+}
+
+User --> UC1
+User --> UC2
+User --> UC3
+
+User --> UC4
+User --> UC5
+User --> UC6
+
+User --> UC7
+User --> UC8
+
+User --> UC9
+User --> UC10
+User --> UC11
+
+User --> UC12
+User --> UC13
+User --> UC14
+User --> UC15
+
+UC5 ..> UC4 : <<extend>>
+UC6 ..> UC4 : <<include>>
+
+@enduml

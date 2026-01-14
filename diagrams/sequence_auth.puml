@@ -1,0 +1,75 @@
+@startuml AuthAndCatalogue
+!theme plain
+skinparam sequenceMessageAlign center
+
+actor "Пользователь" as User
+participant "LoginFragment" as UI
+participant "ViewModel" as VM
+participant "Repository" as Repo
+participant "ApiService" as API
+participant "DataStore" as DS
+
+== Авторизация ==
+
+User -> UI: Ввод email/password
+User -> UI: Нажатие "Войти"
+activate UI
+
+UI -> VM: login(email, password)
+activate VM
+
+VM -> Repo: authenticate(email, password)
+activate Repo
+
+Repo -> API: POST /api/auth
+activate API
+API --> Repo: {token, user}
+deactivate API
+
+Repo -> DS: saveToken(token)
+activate DS
+DS --> Repo: saved
+deactivate DS
+
+Repo -> DS: saveUser(user)
+activate DS
+DS --> Repo: saved
+deactivate DS
+
+Repo --> VM: Success
+deactivate Repo
+
+VM --> UI: LoginSuccess
+deactivate VM
+
+UI -> UI: Navigate to Catalogue
+deactivate UI
+
+note over User,DS
+    Пользователь авторизован
+    Token сохранён в DataStore
+end note
+
+== Просмотр каталога ==
+
+UI -> VM: loadCatalogue()
+activate VM
+
+VM -> Repo: getCars()
+activate Repo
+
+Repo -> API: GET /api/car/catalogue\n(с Bearer token через Interceptor)
+activate API
+API --> Repo: List<Car>
+deactivate API
+
+Repo --> VM: List<Car>
+deactivate Repo
+
+VM --> UI: Update LiveData
+deactivate VM
+
+UI -> User: Показать список авто
+deactivate UI
+
+@enduml

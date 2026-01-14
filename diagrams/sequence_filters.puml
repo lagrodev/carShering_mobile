@@ -1,0 +1,63 @@
+@startuml Filtering
+!theme plain
+skinparam sequenceMessageAlign center
+
+actor "Пользователь" as User
+participant "CatalogueFragment" as UI
+participant "FiltersBottomSheet" as BS
+participant "CatalogueViewModel" as VM
+participant "CarRepository" as Repo
+participant "ApiService" as API
+
+User -> UI: Нажатие "Фильтры"
+activate UI
+
+UI -> BS: show()
+activate BS
+
+BS -> User: Показать фильтры
+deactivate BS
+
+User -> BS: Выбор брендов:\nBMW, Audi
+activate BS
+User -> BS: Выбор классов:\nPremium
+
+note over BS
+    Multi-select чипы:
+    - Множественный выбор брендов
+    - Множественный выбор классов
+    - Состояние сохраняется в ViewModel
+end note
+
+User -> BS: Нажатие "Применить"
+
+BS -> VM: applyFilters(\n  brands=[BMW, Audi],\n  classes=[Premium]\n)
+activate VM
+
+VM -> Repo: getCars(\n  brands=[BMW, Audi],\n  classes=[Premium]\n)
+activate Repo
+
+Repo -> API: GET /api/car/catalogue?\n  brand=BMW&brand=Audi&\n  car_class=Premium
+activate API
+
+note over API
+    Query параметры как List<String>
+    Retrofit автоматически добавляет
+    повторяющиеся параметры
+end note
+
+API --> Repo: List<Car> (filtered)
+deactivate API
+
+Repo --> VM: Filtered cars
+deactivate Repo
+
+VM --> UI: Update LiveData
+deactivate VM
+
+UI -> User: Показать отфильтрованный список
+deactivate UI
+
+BS -> BS: dismiss()
+
+@enduml
